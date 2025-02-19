@@ -1,10 +1,20 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-app = Flask(__name__, template_folder='templates', static_folder='static')
+db = SQLAlchemy()
 
-@app.route('/')
-def index():
-    return 'hello world'
+def create_app() -> Flask:
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5556, debug=True)
+    app = Flask(__name__, template_folder='templates', static_folder='static')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./database.db'
+
+    db.init_app(app)
+
+    from routes import register_routes
+
+    register_routes(app, db)
+
+    migrate = Migrate(app, db)
+
+    return app
