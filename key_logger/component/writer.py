@@ -1,5 +1,7 @@
 from interfaces import Writer
 import json
+import requests
+
 class FileWriter(Writer):
     @staticmethod
     def send_data(data:str, path) -> None:
@@ -17,7 +19,8 @@ class JsonWriter(Writer):
 class NetworkWriter(Writer):
     @staticmethod
     def send_data(data):
-        pass
+        url = "127.0.0.1:5556/logs"
+        response = requests.post(url, data= data)
 
 
 if __name__ == '__main__':
