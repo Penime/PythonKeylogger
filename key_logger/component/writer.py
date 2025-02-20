@@ -24,4 +24,4 @@ class NetworkWriter(Writer):
 
 
 if __name__ == '__main__':
-    FileWriter.send_data()
+    pass
