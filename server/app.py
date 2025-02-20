@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 
 db = SQLAlchemy()
 
+
 def create_app() -> Flask:
 
     app = Flask(__name__, template_folder='templates', static_folder='static')

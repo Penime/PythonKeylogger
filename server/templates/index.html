@@ -2,5 +2,9 @@
 {% block title %}HomePage{% endblock %}
 
 {% block content %}
-    <a href="#" class="btn btn-primary">hello bootstrap</a>
+    <ul>
+        {% for log in logs %}
+            <li>{{ log }}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

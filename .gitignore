@@ -2,3 +2,4 @@
 .vscode
 try.py
 */__pycache__
+*.sql
