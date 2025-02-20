@@ -2,8 +2,8 @@ from interfaces import Encyptor
 
 
 class XorEcryptor(Encyptor):
-    def __init__(self) -> None:
-        self.__key = b'KopLeoRos'
+    def __init__(self, key='KopLeoRos') -> None:
+        self.__key = key.encode()
 
     def encrypt(self, data: str | dict) -> bytes:
         data = str(data).encode()
