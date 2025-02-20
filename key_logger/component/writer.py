@@ -1,12 +1,13 @@
 from interfaces import Writer
 
-
 class FileWriter(Writer):
     # def __init__(self):
     #     pass
 
-    def send_data(self, data):
-        pass
+    @staticmethod
+    def send_data(data:str, path):
+        with open(path ,"a") as file:
+            file.write (data)
 
 
 class JsonWriter(Writer):
