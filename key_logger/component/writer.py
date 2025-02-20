@@ -1,16 +1,17 @@
 from interfaces import Writer
-
+import json
 class FileWriter(Writer):
     @staticmethod
     def send_data(data:str, path) -> None:
-        with open(path ,"a") as file:
+        with open(path ,"w") as file:
             file.write(data)
 
 
 class JsonWriter(Writer):
     @staticmethod
-    def send_data(data: dict):
-        pass
+    def send_data(data: dict, path):
+        with open (path , "w") as Json_File:
+            json.dump(data)
 
 
 class NetworkWriter(Writer):
