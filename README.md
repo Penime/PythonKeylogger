@@ -1,35 +1,69 @@
 <style>
-  body {
-    direction: ltr; /* Set default direction to LTR */
-  }
-  .rtl {
-    direction: rtl; /* For RTL content */
-    text-align: right;
-  }
-  .ltr {
-    direction: ltr;
-    text-align: left;
-  }
+   * {
+      direction: rtl;
+   }
 </style>
 
-<p class="rtl">هذا نص باللغة العربية في اتجاه من اليمين إلى اليسار.</p>
-<p class="ltr">This is an English text in left-to-right direction.</p>
-<pre class="ltr"><code>console.log('This is code block in LTR');</code></pre>
-<div class="rtl">
-هذا نص باللغة العربية في اتجاه من اليمين إلى اليسار.
-</div>
+# PythonKeylogger
+פרוייקט זה הוא Keylogger שנכתב בשפת Python.
 
-<div class="ltr">
-This is an English text in left-to-right direction.
-</div>
+## תכונות
 
-```javascript
-console.log('This is code block in LTR');
-```
-### Bonus Tip:
-If you don't like writing `<div>` tags everywhere, you can also use a `dir` attribute:
-```markdown
-<p dir="rtl">هذا نص باللغة العربية في اتجاه من اليمين إلى اليسار.</p>
+- לכידת הקשות מקלדת
+- שמירת נתונים לקובץ
+- שליחת נתונים לשרת
+- שמירת נתונים בשרת
 
-<p dir="ltr">This is an English text in left-to-right direction.</p>
-```
+## דרישות מערכת
+
+- Python 3.x
+
+## התקנה
+
+1. קלון את הריפו:
+
+   ```shell
+   git clone https://github.com/Penime/PythonKeylogger.git
+   ```
+
+2. כנס לתיקיית הפרויקט:
+
+   ```shell
+   cd PythonKeylogger
+   ```
+
+3. צור סביבה וירטואלית (*אופציונלי*):
+
+   1. וודא שאתה בתיקיית `KeyLogger`
+
+   2. הרץ פקודה:
+      ```shell
+      python -m venv .venv
+      ```
+
+4. התקן את התלויות:
+
+   ```shell
+   pip install -r requirements.txt
+   ```
+
+## שימוש
+
+1. הפעל את השרת בתוך תקיית `server` על ידי:
+   ```shell
+   python run.py
+   ```
+
+2. להפעלת ה-Keylogger, רץ את הסקריפט הראשי `main.py` בתיקיית `key_logger`:
+
+   ```shell
+   python main.py
+   ```
+
+## אזהרה
+
+השימוש ב-Keylogger עלול להפר זכויות פרטיות והחוק. יש להשתמש בו רק לצרכים חוקיים ובהתאם לחוקים המקומיים שלך.
+
+## רשיון
+
+פרויקט זה אינו מכיל רשיון.
