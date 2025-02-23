@@ -3,7 +3,7 @@ from .interfaces import Encyptor
 
 class XorEcryptor(Encyptor):
     def __init__(self, key='KopLeoRos') -> None:
-        self.__key = key.encode()
+        self.__key: bytes = key.encode()
 
     def encrypt(self, data: str | dict) -> bytes:
         data = str(data).encode()

@@ -14,9 +14,9 @@ def register_routes(app, db):
         return render_template('index.html', logs=logs)
 
     @app.route('/logs', methods=['POST'])
-    def logs() -> None:
+    def logs():
         if request.method == 'POST':
-            data = decrypt_data(request.data).decode()
-            data_dict = json.loads(data)
+            data: str = decrypt_data(request.data).decode()
+            data_dict: dict = json.loads(data)
             print(data_dict)
             return data
