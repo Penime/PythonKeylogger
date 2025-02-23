@@ -1,61 +1,111 @@
-<!-- language: rtl -->
-
 # PythonKeylogger
-פרוייקט זה הוא Keylogger שנכתב בשפת Python.
 
-## תכונות
+This project is a Keylogger written in Python.
 
-- לכידת הקשות מקלדת
-- שמירת נתונים לקובץ
-- שליחת נתונים לשרת
-- שמירת נתונים בשרת
+## Features
 
-## דרישות מערכת
+- Captures keyboard keystrokes
+- Saves data to a file
+- Sends data to a server
+- Stores data on a server
+
+## System Requirements
 
 - Python 3.x
+- `pip` installed
 
-## התקנה
+## Installation
 
-1. קלון את הריפו:
+1. Clone the repository:
 
    ```shell
    git clone https://github.com/Penime/PythonKeylogger.git
    ```
 
-2. כנס לתיקיית הפרויקט:
+2. Navigate to the project directory:
 
    ```shell
    cd PythonKeylogger
    ```
 
-3. צור סביבה וירטואלית (*אופציונלי*):
+3. Create a virtual environment (*optional*):
 
-   1. וודא שאתה בתיקיית `PythonKeylogger`
+   ```shell
+   python -m venv .venv
+   ```
 
-   2. הרץ פקודה:
-      ```shell
-      python -m venv .venv
-      ```
+4. Activate the virtual environment (*optional*):
 
-4. התקן את התלויות:
+   - On Windows:
+     ```shell
+     .venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```shell
+     source .venv/bin/activate
+     ```
+
+5. Install dependencies:
 
    ```shell
    pip install -r requirements.txt
    ```
 
-## שימוש
+## Usage
 
-1. הפעל את השרת בתוך תקיית `server` על ידי:
+1. Start the server inside the `server` directory:
+
    ```shell
    python run.py
    ```
 
-2. להפעלת ה-Keylogger, רץ את הסקריפט הראשי `main.py` בתיקיית `key_logger`:
+2. Run the Keylogger by executing the main script in the `key_logger` directory:
 
    ```shell
    python main.py
    ```
 
-## אזהרה
+## Logging & Storage
 
-השימוש ב-Keylogger עלול להפר זכויות פרטיות והחוק. יש להשתמש בו רק לצרכים חוקיים ובהתאם לחוקים המקומיים שלך.
+- If configured captured keystrokes can be stored in a local log file.
+- logs is sent to a remote server.
+- Ensure that logs are managed securely and deleted if necessary.
+
+## Uninstallation
+
+1. Delete the project directory:
+
+   ```shell
+   rm -rf PythonKeylogger
+   ```
+
+2. If a virtual environment was created, remove it:
+
+   ```shell
+   rm -rf .venv
+   ```
+
+3. Remove any generated log files:
+
+   ```shell
+   rm logs.txt
+   ```
+
+## Security & Ethical Disclaimer
+
+The use of a Keylogger may violate privacy rights and laws. This tool is intended for ethical use only, such as monitoring personal devices with explicit consent. Ensure compliance with local laws before using this software.
+
+## License
+
+This project is licensed under the MIT License. See `LICENSE` for details.
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+- Fork the repository.
+- Create a new branch.
+- Commit and push your changes.
+- Submit a pull request.
+
+For any issues or feature requests, open an issue in the repository.
