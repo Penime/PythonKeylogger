@@ -1,4 +1,29 @@
 {
-    "device_id" : "DESKTOP-734HF6T",
-    "log": {"20:00 19/02/2025":["9", "u", "space", "delete"]}
+  "computer_name": "DESKTOP-734HF6T",
+  "users": {
+    "user1": {
+      "apps": [
+        {
+          "name": "app1",
+          "keys": ["h", "e", "l", "l", "o"]
+        },
+        {
+          "name": "app2",
+          "keys": ["w", "o", "r", "l", "d"]
+        }
+      ]
+    },
+    "user2": {
+      "apps": [
+        {
+          "name": "app1",
+          "keys": ["h", "e", "l", "l", "o"]
+        },
+        {
+          "name": "app2",
+          "keys": ["w", "o", "r", "l", "d"]
+        }
+      ]
+    }
+  }
 }
