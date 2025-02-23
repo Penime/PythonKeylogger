@@ -1,8 +1,4 @@
-<style>
-   * {
-      direction: rtl;
-   }
-</style>
+<!-- language: rtl -->
 
 # PythonKeylogger
 פרוייקט זה הוא Keylogger שנכתב בשפת Python.
