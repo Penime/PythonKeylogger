@@ -1,4 +1,4 @@
-from interfaces import Encyptor
+from .interfaces import Encyptor
 
 
 class XorEcryptor(Encyptor):

