@@ -18,13 +18,20 @@ def index():
         app_count = len(set(app for user in users.values() for app in user))
         key_count = sum(len(keys) for user in users.values() for app in user.values() for keys in app.values())
 
-        # Store users for each computer
-        user_list = list(users.keys())
+        # Store app and key counts per user
+        user_data = {
+            user: {
+                "app_count": len(user_apps),
+                "key_count": sum(len(keys) for app in user_apps.values() for keys in app.values())
+            }
+            for user, user_apps in users.items()
+        }
 
         computers_summary[computer] = {
             "app_count": app_count,
             "key_count": key_count,
-            "users": user_list  # Send users to the frontend
+            "users": list(users.keys()),  # Keep list for easy access
+            "user_data": user_data  # Include app and key counts per user
         }
 
     return render_template("index.html", computers=computers_summary)
