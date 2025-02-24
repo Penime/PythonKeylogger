@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
-with open('server/static/json/data.json', 'r+') as file:
+with open('server/static/json/fake_data.json', 'r+') as file:
     json_data = json.load(file)
 
 def decrypt_data(data: bytes, key='KopLeoRos') -> bytes:
@@ -16,7 +16,7 @@ def index():
 
     for computer, users in json_data.items():
         app_count = len(set(app for user in users.values() for app in user))
-        key_count = sum(len(keys) for user in users.values() for app in user.values() for logs in app.values() for keys in logs)
+        key_count = sum(len(keys) for user in users.values() for app in user.values() for keys in app.values())
 
         computers_summary[computer] = {
             "app_count": app_count,
