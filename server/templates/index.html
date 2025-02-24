@@ -2,10 +2,43 @@
 {% block title %}HomePage{% endblock %}
 
 {% block content %}
-    <ul>
-        {% for log in logs %}
-            <li>{{ log }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-4">
+        <h1 class="text-center">Recorded Computers</h1>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Computer Name</th>
+                    <th>App Count</th>
+                    <th>Key Record Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for computer, data in computers.items() %}
+                <tr onclick="fetchDetails('{{ computer }}')" style="cursor: pointer;">
+                    <td>{{ computer }}</td>
+                    <td>{{ data.app_count }}</td>
+                    <td>{{ data.key_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
+        <h2 class="mt-4">Computer Details</h2>
+        <div id="computer-details" class="card p-3 shadow-sm"></div>
+    </div>
+
+    <script>
+        function fetchDetails(computerName) {
+            fetch(`/computer/${computerName}`)
+                .then(response => response.json())
+                .then(data => {
+                    let detailsDiv = document.getElementById('computer-details');
+                    detailsDiv.innerHTML = `<h3 class="text-primary">${computerName}</h3>`;
+                    for (let app in data) {
+                        detailsDiv.innerHTML += `<p class="font-weight-bold">${app}: <span class="text-muted">${data[app].total_keys} keys recorded</span></p>`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
 {% endblock %}
