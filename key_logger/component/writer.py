@@ -20,7 +20,7 @@ class NetworkWriter(Writer):
     @staticmethod
     def send_data(data) -> int:
         url = "http://127.0.0.1:5556/logs"
-        response = requests.post(url, data= data)
+        response = requests.post(url, data=data)
 
         return response.status_code
 

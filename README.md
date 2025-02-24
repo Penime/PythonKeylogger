@@ -56,7 +56,7 @@ This project is a Keylogger written in Python.
 1. Start the server inside the `server` directory:
 
    ```shell
-   python run.py
+   python app.py
    ```
 
 2. Run the Keylogger by executing the main script in the `key_logger` directory:
