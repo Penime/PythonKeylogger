@@ -18,13 +18,32 @@ def index():
         app_count = len(set(app for user in users.values() for app in user))
         key_count = sum(len(keys) for user in users.values() for app in user.values() for keys in app.values())
 
+        # Store users for each computer
+        user_list = list(users.keys())
+
         computers_summary[computer] = {
             "app_count": app_count,
-            "key_count": key_count
+            "key_count": key_count,
+            "users": user_list  # Send users to the frontend
         }
 
     return render_template("index.html", computers=computers_summary)
 
+@app.route('/computer/<computer_name>/user/<user_name>')
+def user_logs(computer_name, user_name):
+    if computer_name not in json_data or user_name not in json_data[computer_name]:
+        return {"error": "User or computer not found"}, 404
+
+    user_data = json_data[computer_name][user_name]
+    
+    formatted_data = {}
+    for app, timestamps in user_data.items():
+        formatted_data[app] = {
+            "total_keys": sum(len(keys) for keys in timestamps.values()),
+            "logs": timestamps
+        }
+
+    return formatted_data
 
 @app.route('/computer/<computer_name>')
 def computer_logs(computer_name):
