@@ -2,77 +2,58 @@
 {% block title %}HomePage{% endblock %}
 
 {% block content %}
-    <button id="theme-toggle" class="btn btn-outline-light">🌙 Toggle Theme</button>
+    <button id="theme-toggle" class="btn btn-outline-secondary">🌙 Toggle Theme</button>
     <div class="container-fluid mt-4">
         <div class="row">
             <!-- Sidebar for computer list -->
             <div class="col-md-4">
-                <h3 class="text-center">Computers</h3>
+                <h3 class="text-center text-body-emphasis">Computers</h3>
                 <ul class="list-group">
                     {% for computer, data in computers.items() %}
                     <li class="list-group-item">
                         <strong>{{ computer }}</strong> 
-                        <span class="badge bg-primary text-white float-end">{{ data.app_count }} Apps, {{ data.key_count }} Keys</span>
+                        <span class="badge text-bg-light float-end">
+                            {{ data.key_count }} Keys
+                        </span>                        
                         <ul class="mt-1">
                             {% for user in data.users %}
-                            <li class="list-group-item list-group-item-action text-muted small" 
+                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-muted small" 
                                 onclick="fetchUserDetails('{{ computer }}', '{{ user }}')" style="cursor: pointer;">
                                 👤 {{ user }}
+                                <span class="badge bg-secondary text-white">
+                                    {{ data.user_data[user].app_count }} Apps, {{ data.user_data[user].key_count }} Keys
+                                </span>
                             </li>  
                             {% endfor %}
-                        </ul>
+                        </ul>                        
                     </li>
                     {% endfor %}
                 </ul>
             </div>
-            
 
             <!-- Details Section -->
             <div class="col-md-8">
-                <h3 class="text-center">Computer Details</h3>
+                <h3 class="text-center text-body-emphasis">User Details</h3>
                 <div id="computer-details" class="card p-3 shadow-sm">
-                    <p class="text-muted">Click a computer to see details</p>
+                    <p class="text-body-secondary">Click a user to see details</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function fetchDetails(computerName) {
-            fetch(`/computer/${computerName}`)
-                .then(response => response.json())
-                .then(data => {
-                    let detailsDiv = document.getElementById('computer-details');
-                    detailsDiv.innerHTML = `<h4 class="text-primary">${computerName}</h4>`;
-                    
-                    for (let app in data) {
-                        detailsDiv.innerHTML += `
-                            <div class="card mb-2 p-2">
-                                <h5>${app}</h5>
-                                <p class="text-muted">${data[app].total_keys} keys recorded</p>
-                                <button class="btn btn-sm btn-secondary" onclick="toggleLogs('${app}')">Show Logs</button>
-                                <div id="log-${app}" style="display: none;">
-                                    ${Object.keys(data[app].logs).map(timestamp => `
-                                        <p><strong>${timestamp}:</strong> ${data[app].logs[timestamp].join(', ')}</p>`).join('')}
-                                </div>
-                            </div>`;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
         function fetchUserDetails(computerName, userName) {
             fetch(`/computer/${computerName}/user/${userName}`)
                 .then(response => response.json())
                 .then(data => {
                     let detailsDiv = document.getElementById('computer-details');
-                    detailsDiv.innerHTML = `<h4 class="text-primary">${computerName} - ${userName}</h4>`;
-        
+                    detailsDiv.innerHTML = `<h4 class="text-body-emphasis">${computerName} - ${userName}</h4>`;
+
                     for (let app in data) {
                         detailsDiv.innerHTML += `
-                            <div class="card mb-2 p-2 app-card bg-dark text-light">
-                                <h5 class="text-primary">${app}</h5> <!-- This gets reset to blue -->
-                                <p class="text-muted">${data[app].total_keys} keys recorded</p>
+                            <div class="card mb-2 p-2 app-card">
+                                <h5 class="text-body-emphasis">${app}</h5>
+                                <p class="text-body-secondary">${data[app].total_keys} keys recorded</p>
                                 <button class="btn btn-sm btn-secondary" onclick="toggleLogs('${app}')">Show Logs</button>
                                 <div id="log-${app}" style="display: none;">
                                     ${Object.keys(data[app].logs).map(timestamp => `
@@ -80,55 +61,41 @@
                                 </div>
                             </div>`;
                     }
-        
-                    applyTheme(); // Reapply theme fix to new content
                 })
                 .catch(error => console.error('Error:', error));
         }
-        
-        
-        // Function to apply the correct theme
+
         function applyTheme() {
             const isDarkMode = localStorage.getItem("theme") === "dark" || 
                 (localStorage.getItem("theme") === null && window.matchMedia("(prefers-color-scheme: dark)").matches);
         
-            if (isDarkMode) {
-                document.body.classList.add("bg-dark", "text-light");
-                document.querySelectorAll(".card, .app-card").forEach(card => card.classList.add("bg-secondary", "text-light"));
-                document.querySelectorAll(".list-group-item").forEach(item => item.classList.add("bg-dark", "text-light"));
-                document.querySelectorAll(".app-card").forEach(card => card.classList.replace("bg-light", "bg-dark")); // Fix app-card color
-                document.querySelectorAll(".text-primary").forEach(el => el.classList.replace("text-primary", "text-warning"));
-                document.querySelectorAll(".badge").forEach(el => el.classList.replace("bg-primary", "bg-warning"));
-                document.querySelectorAll(".badge").forEach(el => el.classList.replace("text-white", "text-dark"));
-                document.getElementById("theme-toggle").classList.replace("btn-outline-light", "btn-outline-dark");
-                document.getElementById("theme-toggle").textContent = "☀️ Light Mode";
-            } else {
-                document.body.classList.remove("bg-dark", "text-light");
-                document.querySelectorAll(".card, .app-card").forEach(card => card.classList.remove("bg-secondary", "text-light"));
-                document.querySelectorAll(".list-group-item").forEach(item => item.classList.remove("bg-dark", "text-light"));
-                document.querySelectorAll(".app-card").forEach(card => card.classList.replace("bg-dark", "bg-light")); // Fix app-card color
-                document.querySelectorAll(".text-warning").forEach(el => el.classList.replace("text-warning", "text-primary"));
-                document.querySelectorAll(".badge").forEach(el => el.classList.replace("bg-warning", "bg-primary"));
-                document.querySelectorAll(".badge").forEach(el => el.classList.replace("text-dark", "text-white"));
-                document.getElementById("theme-toggle").classList.replace("btn-outline-dark", "btn-outline-light");
-                document.getElementById("theme-toggle").textContent = "🌙 Dark Mode";
-            }
+            document.documentElement.setAttribute("data-bs-theme", isDarkMode ? "dark" : "light");
+            localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+        
+            document.getElementById("theme-toggle").textContent = isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode";
+        
+            // Change badge background color dynamically
+            document.querySelectorAll(".badge").forEach(badge => {
+                if (isDarkMode) {
+                    badge.classList.replace("text-bg-light", "text-bg-dark"); // Dark mode: dark badge
+                } else {
+                    badge.classList.replace("text-bg-dark", "text-bg-light"); // Light mode: light badge
+                }
+            });
         }
         
-
-        // Function to toggle theme manually
-        document.getElementById("theme-toggle").addEventListener("click", function() {
-            const isDark = document.body.classList.contains("bg-dark");
-            localStorage.setItem("theme", isDark ? "light" : "dark");
+        // Apply theme on page load
+        document.addEventListener("DOMContentLoaded", applyTheme);
+        
+        // Toggle theme button
+        document.getElementById("theme-toggle").addEventListener("click", function () {
+            const currentTheme = localStorage.getItem("theme") === "dark" ? "light" : "dark";
+            localStorage.setItem("theme", currentTheme);
             applyTheme();
         });
 
-        // Detect system theme changes
-        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
-
-        // Apply the theme on page load
+        // Apply theme on page load
         applyTheme();
-
 
         function toggleLogs(app) {
             let logDiv = document.getElementById(`log-${app}`);
