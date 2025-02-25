@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Keylogger Server{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css">
-</head>
-<body>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css" />
+  </head>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <body>
     {% block content %}{% endblock %}
     <script src="../static/js/bootstrap.js"></script>
-</body>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          document.getElementById("loading-overlay").style.display = "none";
+        }, 500); // Delay to ensure smooth transition
+      });
+    </script>
+  </body>
 </html>
