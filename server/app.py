@@ -1,21 +1,20 @@
 import json
 from flask import Flask, render_template, jsonify, request
+from server_util.util import decrypt_data
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
-with open('server/static/json/fake_data.json', 'r+') as file:
-    json_data = json.load(file)
+json_path = 'server/static/json/fake_data.json'
 
-def decrypt_data(data: bytes, key='KopLeoRos') -> bytes:
-    key: bytes = key.encode()
-    return bytes([data[i] ^ key[i % len(key)] for i in range(len(data))])
+with open(json_path, 'r+') as file:
+    json_data = json.load(file)
 
 @app.route('/')
 def index():
     computers_summary = {}
 
     for computer, users in json_data.items():
-        app_count = len(set(app for user in users.values() for app in user))
+        app_count = len(set(app for user in users.values() for app in user.keys()))
         key_count = sum(len(keys) for user in users.values() for app in user.values() for keys in app.values())
 
         # Store app and key counts per user
