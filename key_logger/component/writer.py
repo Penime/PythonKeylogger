@@ -21,7 +21,7 @@ class NetworkWriter(Writer):
     def send_data(data):
         url = "http://127.0.0.1:5556/logs"
 
-        response = requests.post(url, data=data, timeout=1)
+        response = requests.post(url, data=data, timeout=10)
 
         return response.status_code
 
