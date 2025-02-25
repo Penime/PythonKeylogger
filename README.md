@@ -56,7 +56,7 @@ This project is a Keylogger written in Python.
 1. Start the server inside the `server` directory:
 
    ```shell
-   python app.py
+   python run_server.py
    ```
 
 2. Run the Keylogger by executing the main script in the `key_logger` directory:
@@ -64,6 +64,8 @@ This project is a Keylogger written in Python.
    ```shell
    python main.py
    ```
+
+3. open http://127.0.0.1:5556 in your browser.
 
 ## Logging & Storage
 
