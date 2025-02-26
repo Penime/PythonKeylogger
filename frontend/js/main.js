@@ -24,13 +24,20 @@ function searchComputers() {
     let searchValue = document.getElementById("computer-search").value.toLowerCase();
 
     if (searchValue) {
-        filteredComputersData = allComputersData.filter(([computer, users]) =>
-            computer.toLowerCase().includes(searchValue) ||
-            users.some(userInfo => userInfo.user.toLowerCase().includes(searchValue))
-        );
+        filteredComputersData = allComputersData
+            .map(([computer, users]) => {
+                let matchingUsers = users.filter(userInfo => 
+                    computer.toLowerCase().includes(searchValue) ||
+                    userInfo.user.toLowerCase().includes(searchValue)
+                );
+
+                return matchingUsers.length > 0 ? [computer, matchingUsers] : null; // ✅ Only return matches
+            })
+            .filter(entry => entry !== null); // ✅ Remove computers with no matching users
+
         currentPage = 1; // ✅ Reset to first page when searching
     } else {
-        filteredComputersData = allComputersData; // ✅ Show full data if search is cleared
+        filteredComputersData = allComputersData; // ✅ Restore full data if search is cleared
     }
 
     renderPage();
