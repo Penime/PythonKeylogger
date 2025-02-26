@@ -7,7 +7,7 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
 # Load existing data (replace with your actual file path)
-DATA_FILE = "server/static/json/fake_data.json"
+DATA_FILE = "server/static/json/data.json"
 
 try:
     with open(DATA_FILE, "r") as file:
