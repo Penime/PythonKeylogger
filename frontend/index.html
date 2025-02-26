@@ -21,9 +21,10 @@
             <!-- Left Side: Computers & Users -->
             <div class="col-md-4">
                 <h3 class="text-center text-body-emphasis">Computers</h3>
-                <!-- Search Bar -->
+                <!-- Search Bar with Instant Filtering -->
                 <div class="input-group mb-3">
-                    <input type="text" id="computer-search" class="form-control" placeholder="Search for a computer or user...">
+                    <input type="text" id="computer-search" class="form-control"
+                        placeholder="Search for a computer or user..." oninput="searchComputers()">
                     <button class="btn btn-outline-secondary" onclick="addFilter()">➕ Add Filter</button>
                 </div>
 
@@ -35,6 +36,7 @@
 
                 <!-- Pagination Controls -->
                 <div id="pagination-controls" class="text-center mt-3"></div>
+
             </div>
 
             <!-- Right Side: User Logs -->

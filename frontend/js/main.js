@@ -4,17 +4,33 @@ let allComputersData = [];
 let filteredComputersData = []; // Stores search results
 
 let activeFilters = []; // ✅ Stores active filters
+let currentSearch = ""; // ✅ Keeps track of live search input
+
+function fetchComputers() {
+    let computersContainer = document.getElementById("computers-container");
+    computersContainer.innerHTML = `<p class="text-muted">Loading computers...</p>`;
+    
+    fetch("http://127.0.0.1:5556/computers")
+    .then(response => response.json())
+    .then(data => {
+        allComputersData = Object.entries(data);
+        filteredComputersData = allComputersData; // ✅ Start with full dataset
+        renderPage();
+    })
+    .catch(error => {
+        console.error("Error fetching computers:", error);
+        computersContainer.innerHTML = `<p class="text-danger">Error loading data.</p>`;
+    });
+}
 
 function addFilter() {
-    let searchValue = document.getElementById("computer-search").value.trim().toLowerCase();
-    
-    if (searchValue && !activeFilters.includes(searchValue)) {
-        activeFilters.push(searchValue);
+    if (currentSearch && !activeFilters.includes(currentSearch)) {
+        activeFilters.push(currentSearch);
         updateFiltersUI();
+        document.getElementById("computer-search").value = ""; // ✅ Clear search after adding filter
+        currentSearch = ""; // ✅ Reset current search
         filterData();
     }
-    
-    document.getElementById("computer-search").value = ""; // ✅ Clear search after adding filter
 }
 
 function removeFilter(filter) {
@@ -33,19 +49,21 @@ function updateFiltersUI() {
 }
 
 function filterData() {
-    if (activeFilters.length === 0) {
+    let searchTerms = [...activeFilters, currentSearch].filter(term => term); // ✅ Combine filters and current search
+
+    if (searchTerms.length === 0) {
         filteredComputersData = allComputersData; // ✅ Restore full data if no filters
     } else {
         filteredComputersData = allComputersData
             .map(([computer, users]) => {
                 let matchingUsers = users.filter(userInfo => 
-                    activeFilters.some(filter => 
-                        computer.toLowerCase().includes(filter) ||
-                        userInfo.user.toLowerCase().includes(filter)
+                    searchTerms.some(term => 
+                        computer.toLowerCase().includes(term) ||
+                        userInfo.user.toLowerCase().includes(term)
                     )
                 );
 
-                return matchingUsers.length > 0 ? [computer, matchingUsers] : null; // ✅ Only return matches
+                return matchingUsers.length > 0 ? [computer, matchingUsers] : null;
             })
             .filter(entry => entry !== null);
     }
@@ -54,44 +72,9 @@ function filterData() {
     renderPage();
 }
 
-function fetchComputers() {
-    let computersContainer = document.getElementById("computers-container");
-    computersContainer.innerHTML = `<p class="text-muted">Loading computers...</p>`;
-
-    fetch("http://127.0.0.1:5556/computers")
-        .then(response => response.json())
-        .then(data => {
-            allComputersData = Object.entries(data);
-            filteredComputersData = allComputersData; // ✅ Start with full dataset
-            renderPage();
-        })
-        .catch(error => {
-            console.error("Error fetching computers:", error);
-            computersContainer.innerHTML = `<p class="text-danger">Error loading data.</p>`;
-        });
-}
-
 function searchComputers() {
-    let searchValue = document.getElementById("computer-search").value.trim().toLowerCase();
-
-    if (searchValue) {
-        filteredComputersData = filteredComputersData
-            .map(([computer, users]) => {
-                let matchingUsers = users.filter(userInfo => 
-                    computer.toLowerCase().includes(searchValue) ||
-                    userInfo.user.toLowerCase().includes(searchValue)
-                );
-
-                return matchingUsers.length > 0 ? [computer, matchingUsers] : null;
-            })
-            .filter(entry => entry !== null);
-
-        currentPage = 1;
-    } else {
-        filterData(); // ✅ Restore filtered results instead of full dataset
-    }
-
-    renderPage();
+    currentSearch = document.getElementById("computer-search").value.trim().toLowerCase();
+    filterData();
 }
 
 function renderPage() {
