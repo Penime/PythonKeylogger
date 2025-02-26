@@ -1,3 +1,8 @@
+const computersPerPage = 15; // ✅ Limit how many items are shown per page
+let currentPage = 1;
+let allComputersData = [];
+let filteredComputersData = []; // Stores search results
+
 function fetchComputers() {
     let computersContainer = document.getElementById("computers-container");
     computersContainer.innerHTML = `<p class="text-muted">Loading computers...</p>`;
@@ -5,13 +10,75 @@ function fetchComputers() {
     fetch("http://127.0.0.1:5556/computers")
         .then(response => response.json())
         .then(data => {
-            computersContainer.innerHTML = "";
-            displayComputers(data);
+            allComputersData = Object.entries(data);
+            filteredComputersData = allComputersData; // ✅ Start with full dataset
+            renderPage();
         })
         .catch(error => {
             console.error("Error fetching computers:", error);
             computersContainer.innerHTML = `<p class="text-danger">Error loading data.</p>`;
         });
+}
+
+function searchComputers() {
+    let searchValue = document.getElementById("computer-search").value.toLowerCase();
+
+    if (searchValue) {
+        filteredComputersData = allComputersData.filter(([computer, users]) =>
+            computer.toLowerCase().includes(searchValue) ||
+            users.some(userInfo => userInfo.user.toLowerCase().includes(searchValue))
+        );
+        currentPage = 1; // ✅ Reset to first page when searching
+    } else {
+        filteredComputersData = allComputersData; // ✅ Show full data if search is cleared
+    }
+
+    renderPage();
+}
+
+function renderPage() {
+    let computersContainer = document.getElementById("computers-container");
+    computersContainer.innerHTML = "";
+
+    let start = (currentPage - 1) * computersPerPage;
+    let end = start + computersPerPage;
+    let computersToShow = filteredComputersData.slice(start, end);
+
+    computersToShow.forEach(([computer, users]) => {
+        let usersHtml = users.map(userInfo => `
+            <li class="list-group-item list-group-item-action" onclick="fetchUserDetails('${computer}', '${userInfo.user}')">
+                👤 ${userInfo.user} 
+                <span class="badge text-bg-secondary float-end">${userInfo.apps_count} Apps, ${userInfo.keys_logged} Keys</span>
+            </li>
+        `).join("");
+
+        computersContainer.innerHTML += `
+            <li class="list-group-item">
+                <strong>${computer}</strong>
+                <ul class="list-unstyled">${usersHtml}</ul>
+            </li>`;
+    });
+
+    updatePagination();
+}
+
+function updatePagination() {
+    let paginationDiv = document.getElementById("pagination-controls");
+    let totalPages = Math.ceil(filteredComputersData.length / computersPerPage);
+
+    paginationDiv.innerHTML = `
+        <button class="btn btn-sm btn-outline-secondary" onclick="changePage(-1)" ${currentPage === 1 ? "disabled" : ""}>⬅️ Previous</button>
+        <span> Page ${currentPage} of ${totalPages} </span>
+        <button class="btn btn-sm btn-outline-secondary" onclick="changePage(1)" ${currentPage === totalPages ? "disabled" : ""}>Next ➡️</button>
+    `;
+
+    // ✅ Hide pagination when searching to show all results at once
+    paginationDiv.style.display = filteredComputersData.length === allComputersData.length ? "block" : "none";
+}
+
+function changePage(step) {
+    currentPage += step;
+    renderPage();
 }
 
 function displayComputers(data) {
