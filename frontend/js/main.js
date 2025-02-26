@@ -231,11 +231,11 @@ function displayUserDetails(computerName, userName, userData) {
 
     if (emails.length > 0) {
         insightsContainer.innerHTML += `<p><strong>📧 Emails Found:</strong></p>
-            <div>${emails.map(email => `<span class="badge text-bg-primary me-2">${email}</span>`).join("")}</div>`;
+            <div>${emails.map(email => `<span class="badge text-bg-primary fs-6 me-2 mb-1">${email}</span>`).join("")}</div>`;
     }
     if (urls.length > 0) {
         insightsContainer.innerHTML += `<p><strong>🌐 URLs Found:</strong></p>
-            <div>${urls.map(url => `<span class="badge text-bg-success me-2">${url}</span>`).join("")}</div>`;
+            <div>${urls.map(url => `<span class="badge text-bg-success fs-6 me-2 mb-1">${url}</span>`).join("")}</div>`;
     }
     if (emails.length === 0 && urls.length === 0) {
         insightsContainer.innerHTML += `<p class="text-muted">No emails or URLs found.</p>`;
