@@ -21,13 +21,19 @@
             <!-- Left Side: Computers & Users -->
             <div class="col-md-4">
                 <h3 class="text-center text-body-emphasis">Computers</h3>
-                <input type="text" id="computer-search" class="form-control mb-3"
-                    placeholder="Search for a computer or user..." onkeyup="searchComputers()" />
+                <!-- Search Bar -->
+                <div class="input-group mb-3">
+                    <input type="text" id="computer-search" class="form-control" placeholder="Search for a computer or user...">
+                    <button class="btn btn-outline-secondary" onclick="addFilter()">➕ Add Filter</button>
+                </div>
 
-                <!-- ✅ List of Computers & Users -->
+                <!-- Active Filters Section -->
+                <div id="filters-container" class="mb-3"></div>
+
+                <!-- Computer List -->
                 <ul class="list-group" id="computers-container"></ul>
 
-                <!-- ✅ Pagination Controls -->
+                <!-- Pagination Controls -->
                 <div id="pagination-controls" class="text-center mt-3"></div>
             </div>
 

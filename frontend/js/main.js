@@ -3,6 +3,57 @@ let currentPage = 1;
 let allComputersData = [];
 let filteredComputersData = []; // Stores search results
 
+let activeFilters = []; // ✅ Stores active filters
+
+function addFilter() {
+    let searchValue = document.getElementById("computer-search").value.trim().toLowerCase();
+    
+    if (searchValue && !activeFilters.includes(searchValue)) {
+        activeFilters.push(searchValue);
+        updateFiltersUI();
+        filterData();
+    }
+    
+    document.getElementById("computer-search").value = ""; // ✅ Clear search after adding filter
+}
+
+function removeFilter(filter) {
+    activeFilters = activeFilters.filter(f => f !== filter);
+    updateFiltersUI();
+    filterData();
+}
+
+function updateFiltersUI() {
+    let filtersContainer = document.getElementById("filters-container");
+    filtersContainer.innerHTML = activeFilters.map(filter => `
+        <span class="badge bg-secondary me-2">
+            ${filter} <button class="btn btn-sm btn-close ms-1" onclick="removeFilter('${filter}')"></button>
+        </span>
+    `).join("");
+}
+
+function filterData() {
+    if (activeFilters.length === 0) {
+        filteredComputersData = allComputersData; // ✅ Restore full data if no filters
+    } else {
+        filteredComputersData = allComputersData
+            .map(([computer, users]) => {
+                let matchingUsers = users.filter(userInfo => 
+                    activeFilters.some(filter => 
+                        computer.toLowerCase().includes(filter) ||
+                        userInfo.user.toLowerCase().includes(filter)
+                    )
+                );
+
+                return matchingUsers.length > 0 ? [computer, matchingUsers] : null; // ✅ Only return matches
+            })
+            .filter(entry => entry !== null);
+    }
+
+    currentPage = 1; // ✅ Reset to first page when filtering
+    renderPage();
+}
+
 function fetchComputers() {
     let computersContainer = document.getElementById("computers-container");
     computersContainer.innerHTML = `<p class="text-muted">Loading computers...</p>`;
@@ -21,23 +72,23 @@ function fetchComputers() {
 }
 
 function searchComputers() {
-    let searchValue = document.getElementById("computer-search").value.toLowerCase();
+    let searchValue = document.getElementById("computer-search").value.trim().toLowerCase();
 
     if (searchValue) {
-        filteredComputersData = allComputersData
+        filteredComputersData = filteredComputersData
             .map(([computer, users]) => {
                 let matchingUsers = users.filter(userInfo => 
                     computer.toLowerCase().includes(searchValue) ||
                     userInfo.user.toLowerCase().includes(searchValue)
                 );
 
-                return matchingUsers.length > 0 ? [computer, matchingUsers] : null; // ✅ Only return matches
+                return matchingUsers.length > 0 ? [computer, matchingUsers] : null;
             })
-            .filter(entry => entry !== null); // ✅ Remove computers with no matching users
+            .filter(entry => entry !== null);
 
-        currentPage = 1; // ✅ Reset to first page when searching
+        currentPage = 1;
     } else {
-        filteredComputersData = allComputersData; // ✅ Restore full data if search is cleared
+        filterData(); // ✅ Restore filtered results instead of full dataset
     }
 
     renderPage();
@@ -205,6 +256,11 @@ document.getElementById("theme-toggle").addEventListener("click", function () {
     const currentTheme = localStorage.getItem("theme") === "dark" ? "light" : "dark";
     localStorage.setItem("theme", currentTheme);
     applyTheme();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetchComputers();
+    filterData();
 });
 
 document.addEventListener("DOMContentLoaded", applyTheme);
