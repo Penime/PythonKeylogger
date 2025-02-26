@@ -1,0 +1,46 @@
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+[data-bs-theme="dark"] body {
+    background-color: #212529;
+    color: #f8f9fa;
+}
+
+.card {
+    border-radius: 10px;
+    background-color: var(--bs-body-bg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item {
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-bs-theme="dark"] .list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.key-button {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    font-family: monospace;
+    font-size: 14px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-bs-theme="dark"] .key-button {
+    background-color: #333;
+    border: 1px solid #777;
+    color: white;
+}
