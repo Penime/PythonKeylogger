@@ -9,8 +9,8 @@ This project is a keylogger application that records keystrokes from multiple co
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Front-End Interface](#front-end-interface)
-- [Contributing](#contributing)
 - [License](#license)
+- [Contributing](#contributing)
 
 ## Features
 
